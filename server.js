@@ -4,7 +4,7 @@ const express = require('express');
 const SocketServer = require('ws').Server;
 const path = require('path');
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3002;
 const INDEX = path.join(__dirname, 'index.html');
 
 const server = express()
@@ -17,17 +17,9 @@ wss.on('connection', (ws) => {
   ws.on('message', function (message) {
     console.log('get message ' + message);
     wss.clients.forEach((client) => {
-      client.send(JSON.stringify({
-        time: new Date().toTimeString(),
-        data: message
-      }));
+      client.send(message);
     });
   });
-
 });
 
-setInterval(() => {
-  wss.clients.forEach((client) => {
-    client.send(JSON.stringify({ time: new Date().toTimeString() }));
-  });
-}, 1000);
+console.log('Server started');
